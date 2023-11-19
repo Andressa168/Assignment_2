@@ -652,7 +652,7 @@ function drawBackground() {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
         gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-        gTranslate(-35, 0, -35) ;
+        gTranslate(-35, 2, -35) ;
         gScale(15, 8, 12);
         drawCube() ;
     }
