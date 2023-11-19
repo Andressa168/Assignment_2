@@ -14,6 +14,7 @@ var right = 6.0;
 var ytop =6.0;
 var bottom = -6.0;
 
+var delta = 165 / 60;///////
 
 var lightPosition2 = vec4(100.0, 100.0, 100.0, 1.0 );
 var lightPosition = vec4(0.0, 0.0, 100.0, 1.0 );
@@ -33,7 +34,7 @@ var ambientColor, diffuseColor, specularColor;
 var modelMatrix, viewMatrix ;
 var modelViewMatrix, projectionMatrix, normalMatrix;
 var modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc;
-var eye;
+var eye = vec3(0, 0, 0);
 var at = vec3(0.0, 0.0, 0.0);
 var up = vec3(0.0, 1.0, 0.0);
 
@@ -73,7 +74,6 @@ image2[4*texSize*i+4*j+k] = 255*image1[i][j][k];
 
 
 var textureArray = [] ;
-
 
 
 function isLoaded(im) {
@@ -371,7 +371,6 @@ function gPush() {
     MS.push(modelMatrix) ;
 }
 
-
 var currentTime = 0;
 var sceneNum = 0;
 var sceneLengths = [6, 11, 10.8, 6.1, -1];
@@ -380,12 +379,11 @@ var sceneTime = 0;
 var frameRateTime = 0;
 var frameCount = 0;
 
-
 function render() {//start 
     
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
-    // at = vec3(at[0], at[1], at[2]);
+    at = vec3(at[0], at[1], at[2]);
     // eye = vec3(eye[0], eye[1], eye[2]);
     eye = vec3(10,0,1);
     eye[1] = eye[1] + 0 ;
@@ -419,131 +417,78 @@ function render() {//start
             resetTimerFlag = false ;
         }
         TIME = TIME + curTime - prevTime ;
+        timeDiff = curTime - prevTime;
+        currentTime += timeDiff;
         prevTime = curTime ;
     }
 
-    // if (sceneLengths[sceneNum] <= sceneTime && sceneLengths[sceneNum] !== -1) { // setting scene happen time;
-    //     sceneNum++;
-    //     sceneTime = 0;
-    // }
+    if (sceneLengths[sceneNum] <= sceneTime && sceneLengths[sceneNum] !== -1) { // setting scene happen time;
+        sceneNum++;
+        sceneTime = 0;
+    }
 
-    // switch (sceneNum) { // scene happen with the time goes;
-    //     case 0:
-    //         scene0(sceneTime);
-    //         break;
-    //     case 1:
-    //         scene1(sceneTime);
-    //         break;
-    //     case 2:
-    //         scene2(sceneTime);
-    //         break;
-    //     case 3:
-    //         scene3(sceneTime);
-    //         break;
-    //     case 4:
-    //         scene4(sceneTime);
-    //         break;
-    // }
-    // sceneTime += timeDiff;
-    // frameRateTime += timeDiff;
+    switch (sceneNum) { // scene happen with the time goes;
+        case 0:
+            scene0(sceneTime);
+            break;
+        case 1:
+            scene1(sceneTime);
+            break;
+    }
+    sceneTime += timeDiff;
+    frameRateTime += timeDiff;
     drawBackground();
 
-    // frameCount++;
-    // if (frameRateTime >= 2.0) {
-    //     console.log("FPS: " + (frameCount / frameRateTime).toFixed(1));
-    //     frameRateTime = 0;
-    //     frameCount = 0;
-    // }
-    // window.requestAnimFrame(render);
-    
-    // gl.activeTexture(gl.TEXTURE0);
-    // gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
-    // gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-    
-    
-    // gTranslate(-4,0,0) ;
-    // gPush() ;
-    // {
-    //     gRotate(TIME*180/3.14159,0,1,0) ;
-    //     setColor(vec4(1.0,0.0,0.0,1.0)) ;
-    //     drawSphere() ;
-    // }
-    // gPop() ;
-    
-    // gPush() ;
-    // {
-    //     gTranslate(3,0,0) ;
-    //     setColor(vec4(0.0,1.0,0.0,1.0)) ;
-    //     gRotate(TIME*180/3.14159,0,1,0) ;
-    //     drawCube() ;
-    // }
-    // gPop() ;
-    
-   
-    
-    // gPush() ;
-    // {
-    //     gTranslate(5,0,0) ;
-    //     setColor(vec4(0.0,1.0,1.0,1.0)) ;
-    //     gRotate(TIME*180/3.14159,0,1,0) ;
-    //     drawCylinder() ;
-    // }
-    // gPop() ;
-    
-    
-    
-    // gPush() ;
-    // {
-    //     gTranslate(7,0,0) ;
-    //     setColor(vec4(1.0,1.0,0.0,1.0)) ;
-    //     gRotate(TIME*180/3.14159,0,1,0) ;
-    //     drawCone() ;
-    // }
-    // gPop() ;
+    frameCount++;
+    if (frameRateTime >= 2.0) {
+        console.log("FPS: " + (frameCount / frameRateTime).toFixed(1));
+        frameRateTime = 0;
+        frameCount = 0;
+    }
 
     //Owner of the house;
     gPush();
     {
-        gTranslate(0, -1.7, 0);
-        gPush();//Head
+        // gTranslate(0, -1, 0);
+        gTranslate(0, -1, TIME+=0.01);
+        setColor(vec4(1.0,0.5,1.0,1.0)) ;
+        gPush();
         {
-            gTranslate(0,0,-5) ;
-            gScale(0.5, 0.5, 0.5);
-            setColor(vec4(1.0,0.5,1.0,1.0)) ;
-            gRotate(TIME*180/3.14159,0,1,0) ;
-            drawSphere();
+            gPush();//Head
+            {
+                gTranslate(0,0,-5) ;
+                gScale(0.5, 0.5, 0.5);
+                drawSphere();
+            }
+            gPop();
+
+            gPush();//Hat
+            {
+                gTranslate(0, 0.7, -5);
+                gScale(0.3, 0.5, 0.3);
+                gRotate(270, 1, 0, 0);
+                drawCone();
+            }
+            gPop();
         }
-        gPop();
 
         gPush();//Body
         {
             gTranslate(0,-1.5,-5) ;
             gScale(0.8, 1, 0.7);
-            setColor(vec4(1.0,0.5,1.0,1.0)) ;
-            gRotate(TIME*180/3.14159,0,1,0) ;
             drawCube();
-        }
-        gPop();
-
-        gPush();//Hat
-        {
-            gTranslate(0, 0.7, -5);
-            gScale(0.3, 0.5, 0.3);
-            setColor(vec4(1.0,0.5,1.0,1.0));
-            gRotate(270, 1, 0, 0);
-            drawCone();
         }
         gPop();
 
         gPush();//Arms
         {
-
+            
             gPush();//Left Arms
             {
+
                 gTranslate(-1, -1.5, -5);
                 gRotate(45,0,0,-1);
                 gScale(0.2, 0.7, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
                 drawCube();
             }
             gPop();
@@ -551,10 +496,10 @@ function render() {//start
             
             gPush();//Right Arms
             {
+  
                 gTranslate(1, -1.5, -5);
                 gRotate(45,0,0,1);
                 gScale(0.2, 0.7, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
                 drawCube();
             }
             gPop();
@@ -567,9 +512,8 @@ function render() {//start
             gPush();//Left Leg
             {
                 gTranslate(-0.35, -3, -5);
+                gRotate(-(Math.sin(TIME) * 20) + 5, 1, 0, 0);
                 gScale(0.2, 0.8, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
-                gRotate(TIME*180/3.14159,0,1,0);
                 drawCube();
             }
             gPop();
@@ -577,9 +521,8 @@ function render() {//start
             gPush();//Right Leg
             {
                 gTranslate(0.35, -3, -5);
+                gRotate((Math.sin(TIME) * 20) + 5, 1, 0, 0);
                 gScale(0.2, 0.8, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
-                gRotate(TIME*180/3.14159,0,1,0);
                 drawCube();
             }
             gPop();
@@ -590,6 +533,14 @@ function render() {//start
     
     if( animFlag )
         window.requestAnimFrame(render);
+}
+
+class Vector {
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
 }
 
 var people = {
@@ -606,10 +557,86 @@ var people = {
             gRotate(this.rotation.y, 0, 1, 0);
             gRotate(this.rotation.z, 0, 0, 1);
 
-            
+            // gTranslate(0, -1.7, 0);
+            gPush();
+            {
+                setColor(vec4(0.5, 0.5, 0.5, 1));
+                gPush();//Head and Hat
+                {
+                    gTranslate(0,0,-5);
+                    gScale(0.5, 0.5, 0.5);
+                    
+                    drawSphere();
+                }
+                gPop();
+
+                gPush();//Hat
+                {
+                    gTranslate(0, 0.7, -5);
+                    gScale(0.3, 0.5, 0.3);
+                    gRotate(270, 1, 0, 0);
+                    drawCone();
+                }
+                gPop();
+            }
+            gPop();
+                
+            gPush();
+            {
+                gTranslate(0,-1.5,-5);
+                setColor(vec4(1.0,0.5,1.0,1.0));
+                gScale(0.8, 1, 0.7);
+                drawCube();
+            }
+
+            gPush();//Arms
+            {
+                setColor(vec4(1.0,0.5,1.0,1.0));
+                gPush();//Left Arms
+                {
+                    gTranslate(-1, -1.5, -5);
+                    gRotate(45,0,0,-1);
+                    gScale(0.2, 0.7, 0.2);
+                    drawCube();
+                }
+                gPop();
+
+                gPush();//Right Arms
+                {
+                    gTranslate(1, -1.5, -5);
+                    gRotate(45,0,0,1);
+                    gScale(0.2, 0.7, 0.2);
+                    drawCube();
+                }
+                gPop();
+            }
+            gPop();
+
+            gPush();//Legs
+            {
+                setColor(vec4(1.0,0.5,1.0,1.0));
+                gRotate(TIME*180/3.14159,0,1,0);
+                gPush();//Left Leg
+                {
+                    gTranslate(-0.35, -3, -5);
+                    gScale(0.2, 0.8, 0.2);
+                    drawCube();
+                }
+                gPop();
+
+                gPush();//Right Leg
+                {
+                    gTranslate(0.35, -3, -5);
+                    gScale(0.2, 0.8, 0.2);
+                    drawCube();
+                }
+                gPop();
+            }
+            gPop();
         }
-    }
-}
+        gPop();      
+    },
+};
 
 function drawBackground() {
 
@@ -634,7 +661,30 @@ function drawBackground() {
         drawCube() ;
     }
     gPop();
+}
 
+function scene0(sceneTime) {
+    if (sceneTime === 0) {
+        // initial location placing
+        people.position.x = -8; // model 1;
+        people.position.y = 0;
+        people.position.z = -45;
+        at = vec3(people.position.x, people.position.y, people.position.z); // camera location;
+        eye = vec3(people.position.x - 3, 1, people.position.z + 1);
+        eye[2] = -50;
+    } else if (sceneTime <= 4) {
+        people.position.z += 0.01 * delta; // model movements in z axis;
+        at[2] += 0.01 * delta; // camera movements;
+        eye[1] += 0.0045 * delta;
+        eye[2] += 0.03 * delta;
+    } else if (sceneTime <= 6) {
+        people.position.z += 0.01 * delta;
+        at[2] += 0.01 * delta;
+        eye[1] += 0.03 * delta;
+        eye[2] += 0.05 * delta;
+    }
+
+    people.renderPeople();
 }
 
 // A simple camera controller which uses an HTML element as the event
