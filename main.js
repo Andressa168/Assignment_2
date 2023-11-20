@@ -391,8 +391,8 @@ function render() {//start
     eye[1] = eye[1] + 0 ;
    
     // set the projection matrix
-    // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-    projectionMatrix = perspective(45, 1, near, far);
+    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    // projectionMatrix = perspective(45, 1, near, far);
     
     // set the camera matrix
     viewMatrix = lookAt(eye, at, up);
@@ -536,14 +536,14 @@ function render() {//start
             // gRotate(this.rotation.x, 1, 0, 0);
             // gRotate(this.rotation.y, 0, 1, 0);
             // gRotate(this.rotation.z, 0, 0, 1);
-            gTranslate(0, 1, 0);
+
             setColor(vec4(1.0,0.5,1.0,1.0));
             gPush();
             {
                 
                 gPush();//Head
                 {
-                    gTranslate(0, 0, -8);
+                    gTranslate(0, 0, -5);
                     gScale(0.5, 0.5, 0.5);
                     drawSphere();
                 }
@@ -551,7 +551,7 @@ function render() {//start
 
                 gPush();//Hat
                 {
-                    gTranslate(0, 0.7, -8);
+                    gTranslate(0, 0.7, -5);
                     gScale(0.3, 0.5, 0.3);
                     gRotate(270, 1, 0, 0);
                     drawCone();
@@ -562,7 +562,7 @@ function render() {//start
                 
             gPush();//Body
             {
-                gTranslate(0,-1.5,-8);
+                gTranslate(0,-1.5,-5);
                 gScale(0.8, 1, 0.7);
                 drawCube();
             }
@@ -572,7 +572,7 @@ function render() {//start
                 
                 gPush();//Left Arms
                 {
-                    gTranslate(-2, -0.5, -8);
+                    gTranslate(-2, -0.5, -5);
                     gRotate(45,0,0,-1);
                     gScale(0.3, 1, 0.3);
                     drawCube();
@@ -581,7 +581,7 @@ function render() {//start
 
                 gPush();//Right Arms
                 {
-                    gTranslate(2, -0.5, -8);
+                    gTranslate(2, -0.5, -5);
                     gRotate(45,0,0,1);
                     gScale(0.3, 1, 0.3);
                     drawCube();
@@ -592,11 +592,11 @@ function render() {//start
 
             gPush();//Legs
             {
-
+ 
                 gPush();//Left Leg
                 {
-                    gRotate((Math.sin(TIME) * 10) + 10, 0, 0, 1);
-                    gTranslate(-0.50, -3, -8);
+                    gRotate((Math.sin(TIME) * 20) + 10 , 1, 0, 0);
+                    gTranslate(-0.5, -1.5, 0);
                     gScale(0.3, 1, 0.3);
                     drawCube();
                 }
@@ -604,8 +604,8 @@ function render() {//start
 
                 gPush();//Right Leg
                 {
-                    gRotate(-(Math.sin(TIME) * 10) + 10, 0, 0, 1);
-                    gTranslate(0.50, -3, -8);
+                    gRotate(-(Math.sin(TIME) * 20) + 10, 1, 0, 0);
+                    gTranslate(0.5, -1.5, 0);
                     gScale(0.3, 1, 0.3);
                     drawCube();
                 }

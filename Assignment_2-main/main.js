@@ -540,28 +540,27 @@ var people = {
             // gRotate(this.rotation.x, 1, 0, 0);
             // gRotate(this.rotation.y, 0, 1, 0);
             // gRotate(this.rotation.z, 0, 0, 1);
-        
-            gTranslate(0, -1.7, 0);
+            gTranslate(-20, -1, TIME+=0.01);
             setColor(vec4(1.0,0.5,1.0,1.0)) ;
             gPush();//Head
             {
-                gTranslate(0,0,-5) ;
+                gTranslate(0, 0, -20);
                 gScale(0.5, 0.5, 0.5);
-                drawSphere();
+                drawCube();
             }
             gPop();
 
             gPush();//Body
             {
-                gTranslate(0,-1.5,-5) ;
-                gScale(0.8, 1, 0.7);
+                gTranslate(0,-1.5, -20) ;
+                gScale(0.8, 1, 0.8);
                 drawCube();
             }
             gPop();
 
             gPush();//Hat
             {
-                gTranslate(0, 0.7, -5);
+                gTranslate(0, 0.7, -20);
                 gScale(0.3, 0.5, 0.3);
                 gRotate(270, 1, 0, 0);
                 drawCone();
@@ -573,7 +572,7 @@ var people = {
 
                 gPush();//Left Arms
                 {
-                    gTranslate(-1, -1.5, -5);
+                    gTranslate(-1, -1.5, -20);
                     gRotate(45, 0, 0, -1);
                     gScale(0.2, 0.7, 0.2);
                     drawCube();
@@ -582,7 +581,7 @@ var people = {
 
                 gPush();//Right Arms
                 {
-                    gTranslate(1, -1.5, -5);
+                    gTranslate(1, -1.5, -20);
                     gRotate(45, 0, 0, 1);
                     gScale(0.2, 0.7, 0.2);
                     drawCube();
@@ -596,7 +595,8 @@ var people = {
                 
                 gPush();//Left Leg
                 {
-                    gTranslate(-0.35, -3, -5);
+                    gRotate((Math.sin(TIME) * 5) + 2, 1, 0, 0);
+                    gTranslate(-0.5, -3, -20);
                     gScale(0.2, 0.8, 0.2);
                     drawCube();
                 }
@@ -604,7 +604,8 @@ var people = {
 
                 gPush();//Right Leg
                 {
-                    gTranslate(0.35, -3, -5);
+                    gRotate(-(Math.sin(TIME) * 5) + 2, 1, 0, 0);
+                    gTranslate(0.5, -3, -20);
                     gScale(0.2, 0.8, 0.2);
                     drawCube();
                 }
@@ -823,21 +824,24 @@ function scene0(sceneTime) {
         tank.position.x = -8;
         tank.position.y = -2;
         tank.position.z = -45;
+
         at = vec3(tank.position.x, tank.position.y, tank.position.z);
-        eye = vec3(tank.position.x - 6, 2, tank.position.z + 0.5); //camera position
+        eye = vec3(tank.position.x - 3, 2, tank.position.z + 0.5); //camera position
         eye[2] = -50;
+
+    } else if (sceneTime <= 4) {
+
+        tank.position.z += 0.01 * delta;
+        at[2] += 0.01 * delta;
+        eye[1] += 0.0045 * delta;
+        eye[2] += 0.03 * delta;
+    } else if (sceneTime <= 6) {
+
+        tank.position.z += 0.01 * delta;
+        at[2] += 0.01 * delta;
+        eye[1] += 0.03 * delta;
+        eye[2] += 0.05 * delta;
     }
-    // } else if (sceneTime <= 4) {
-    //     tank.position.z += 0.01 * delta;
-    //     at[2] += 0.01 * delta;
-    //     eye[1] += 0.0045 * delta;
-    //     eye[2] += 0.03 * delta;
-    // } else if (sceneTime <= 6) {
-    //     tank.position.z += 0.01 * delta;
-    //     at[2] += 0.01 * delta;
-    //     eye[1] += 0.03 * delta;
-    //     eye[2] += 0.05 * delta;
-    // }
 
     //tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
     //tank.turretGunRotation.x = -5 + 5 * Math.cos(currentTime * 4);
