@@ -424,26 +424,26 @@ function render() {//start
         prevTime = curTime ;
     }
 
-    if (sceneLengths[sceneNum] <= sceneTime && sceneLengths[sceneNum] !== -1) { // setting scene happen time;
-        sceneNum++;
-        sceneTime = 0;
-    }
+    // if (sceneLengths[sceneNum] <= sceneTime && sceneLengths[sceneNum] !== -1) { // setting scene happen time;
+    //     sceneNum++;
+    //     sceneTime = 0;
+    // }
 
-    switch (sceneNum) { // scene happen with the time goes;
-        case 0:
-            scene0(sceneTime);
-            break;
-    }
-    sceneTime += timeDiff;
-    frameRateTime += timeDiff;
+    // switch (sceneNum) { // scene happen with the time goes;
+    //     case 0:
+    //         scene0(sceneTime);
+    //         break;
+    // }
+    // sceneTime += timeDiff;
+    // frameRateTime += timeDiff;
     drawBackground();
 
-    frameCount++;
-    if (frameRateTime >= 2.0) {
-        console.log("FPS: " + (frameCount / frameRateTime).toFixed(1));
-        frameRateTime = 0;
-        frameCount = 0;
-    }
+    // frameCount++;
+    // if (frameRateTime >= 2.0) {
+    //     console.log("FPS: " + (frameCount / frameRateTime).toFixed(1));
+    //     frameRateTime = 0;
+    //     frameCount = 0;
+    // }
 
     //Owner of the house;
     // gPush();
@@ -529,6 +529,91 @@ function render() {//start
     //     gPop();
     // }
     // gPop();
+
+    gPush(); 
+        {
+            // gTranslate(this.position.x, this.position.y, this.position.z);
+            // gRotate(this.rotation.x, 1, 0, 0);
+            // gRotate(this.rotation.y, 0, 1, 0);
+            // gRotate(this.rotation.z, 0, 0, 1);
+            gTranslate(0, 1, 0);
+            setColor(vec4(1.0,0.5,1.0,1.0));
+            gPush();
+            {
+                
+                gPush();//Head
+                {
+                    gTranslate(0, 0, -8);
+                    gScale(0.5, 0.5, 0.5);
+                    drawSphere();
+                }
+                gPop();
+
+                gPush();//Hat
+                {
+                    gTranslate(0, 0.7, -8);
+                    gScale(0.3, 0.5, 0.3);
+                    gRotate(270, 1, 0, 0);
+                    drawCone();
+                }
+                gPop();
+            }
+            gPop();
+                
+            gPush();//Body
+            {
+                gTranslate(0,-1.5,-8);
+                gScale(0.8, 1, 0.7);
+                drawCube();
+            }
+
+            gPush();//Arms
+            {
+                
+                gPush();//Left Arms
+                {
+                    gTranslate(-2, -0.5, -8);
+                    gRotate(45,0,0,-1);
+                    gScale(0.3, 1, 0.3);
+                    drawCube();
+                }
+                gPop();
+
+                gPush();//Right Arms
+                {
+                    gTranslate(2, -0.5, -8);
+                    gRotate(45,0,0,1);
+                    gScale(0.3, 1, 0.3);
+                    drawCube();
+                }
+                gPop();
+            }
+            gPop();
+
+            gPush();//Legs
+            {
+
+                gPush();//Left Leg
+                {
+                    gRotate((Math.sin(TIME) * 10) + 10, 0, 0, 1);
+                    gTranslate(-0.50, -3, -8);
+                    gScale(0.3, 1, 0.3);
+                    drawCube();
+                }
+                gPop();
+
+                gPush();//Right Leg
+                {
+                    gRotate(-(Math.sin(TIME) * 10) + 10, 0, 0, 1);
+                    gTranslate(0.50, -3, -8);
+                    gScale(0.3, 1, 0.3);
+                    drawCube();
+                }
+                gPop();
+            }
+            gPop();
+        }
+        gPop();      
     
     if( animFlag )
         window.requestAnimFrame(render);
@@ -551,16 +636,16 @@ var people = {
 
         gPush(); 
         {
-            gTranslate(this.position.x, this.position.y, this.position.z);
-            gRotate(this.rotation.x, 1, 0, 0);
-            gRotate(this.rotation.y, 0, 1, 0);
-            gRotate(this.rotation.z, 0, 0, 1);
+            // gTranslate(this.position.x, this.position.y, this.position.z);
+            // gRotate(this.rotation.x, 1, 0, 0);
+            // gRotate(this.rotation.y, 0, 1, 0);
+            // gRotate(this.rotation.z, 0, 0, 1);
 
             setColor(vec4(1.0,0.5,1.0,1.0));
             gPush();
             {
                 
-                gPush();//Head and Hat
+                gPush();//Head
                 {
                     gTranslate(0, 0, -5);
                     gScale(0.5, 0.5, 0.5);
@@ -647,7 +732,7 @@ function drawBackground() {
     }
     gPop();
 
-    gPush();//House;
+    gPush();//School;
     {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
@@ -659,30 +744,30 @@ function drawBackground() {
     gPop();
 }
 
-function scene0(sceneTime) {
+// function scene0(sceneTime) {
 
-    if (sceneTime === 0) {
-        // initial location placing
-        people.position.x = 35; // model 1;
-        people.position.y = 0;
-        people.position.z = -20;
-        at = vec3(people.position.x, people.position.y, people.position.z); // camera location;
-        eye = vec3(people.position.x - 3, 1, people.position.z + 1);
-        eye[2] = -20;
-    } else if (sceneTime <= 4) {
-        people.position.z += 0.01 * delta; // model movements in z axis;
-        at[2] += 0.01 * delta; // camera movements;
-        eye[1] += 0.0045 * delta;
-        eye[2] += 0.03 * delta;
-    } else if (sceneTime <= 6) {
-        people.position.z += 0.01 * delta;
-        at[2] += 0.01 * delta;
-        eye[1] += 0.03 * delta;
-        eye[2] += 0.05 * delta;
-    }
+//     if (sceneTime === 0) {
+//         // initial location placing
+//         people.position.x = 5; // model 1;
+//         people.position.y = 0;
+//         people.position.z = -20;
+//         at = vec3(people.position.x, people.position.y, people.position.z); // camera location;
+//         eye = vec3(people.position.x - 3, 1, people.position.z + 1);
+//         eye[2] = -20;
+//     } else if (sceneTime <= 4) {
+//         people.position.z += 0.01 * delta; // model movements in z axis;
+//         at[2] += 0.01 * delta; // camera movements;
+//         eye[1] += 0.0045 * delta;
+//         eye[2] += 0.03 * delta;
+//     } else if (sceneTime <= 6) {
+//         people.position.z += 0.01 * delta;
+//         at[2] += 0.01 * delta;
+//         eye[1] += 0.03 * delta;
+//         eye[2] += 0.05 * delta;
+//     }
     
-    people.renderPeople();
-}
+//     people.renderPeople();
+// }
 
 // A simple camera controller which uses an HTML element as the event
 // source for constructing a view matrix. Assign an "onchange"
