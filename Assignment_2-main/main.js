@@ -13,6 +13,7 @@ var left = -6.0;
 var right = 6.0;
 var ytop =6.0;
 var bottom = -6.0;
+var delta = 165 / 60;// delta added
 
 
 var lightPosition2 = vec4(100.0, 100.0, 100.0, 1.0 );
@@ -68,8 +69,8 @@ var image2 = new Uint8Array(4*texSize*texSize);
 
 for ( var i = 0; i < texSize; i++ )
     for ( var j = 0; j < texSize; j++ )
-    for(var k =0; k<4; k++)
-        image2[4*texSize*i+4*j+k] = 255*image1[i][j][k];
+        for(var k =0; k<4; k++)
+            image2[4*texSize*i+4*j+k] = 255*image1[i][j][k];
 
 
 var textureArray = [] ;
@@ -417,6 +418,7 @@ function render() {//start
     
     // get real time
     var curTime ;
+    if(animFlag){
    
         curTime = (new Date()).getTime() /1000 ;
         if( resetTimerFlag ) {
@@ -427,7 +429,7 @@ function render() {//start
         timeDiff = curTime - prevTime;
         currentTime += timeDiff;
         prevTime = curTime;
-    
+    }
 
      if (sceneLengths[sceneNum] <= sceneTime && sceneLengths[sceneNum] !== -1) { // setting scene happen time;
          sceneNum++;
@@ -462,7 +464,10 @@ function render() {//start
         frameRateTime = 0;
         frameCount = 0;
     }
+
+    if(animFlag)
     window.requestAnimFrame(render);
+
 }
 
     // frameCount++;
@@ -519,7 +524,12 @@ function render() {//start
     // gPop() ;
 
     //Owner of the house;
-    gPush();
+    var people = {
+        position: new Vector(),
+        rotation: new Vector(),
+
+        renderPeople:function (){
+            gPush();
     {
         gTranslate(0, -1.7, 0);
         gPush();//Head
@@ -604,10 +614,9 @@ function render() {//start
         gPop();
     }
     gPop();
-
+        }
+    }
     
-
-
 /*var people = {
 
     position: new Vector(),
@@ -829,6 +838,7 @@ function scene0(sceneTime) {
     tank.turretGunRotation.x = -5 + 5 * Math.cos(currentTime * 4);
 
     tank.renderTank();
+    people.renderPeople();
 }
 
 // A simple camera controller which uses an HTML element as the event
