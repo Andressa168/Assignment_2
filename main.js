@@ -387,12 +387,13 @@ function render() {//start
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     at = vec3(at[0], at[1], at[2]);
-    eye = vec3(eye[0], eye[1], eye[2]);
+    // eye = vec3(eye[0], eye[1], eye[2]);
+    eye = vec3(20, 0, 15);
     eye[1] = eye[1] + 0 ;
    
     // set the projection matrix
-    projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-    // projectionMatrix = perspective(45, 1, near, far);
+    // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
+    projectionMatrix = perspective(45, 1, near, far);
     
     // set the camera matrix
     viewMatrix = lookAt(eye, at, up);
@@ -529,91 +530,157 @@ function render() {//start
     //     gPop();
     // }
     // gPop();
+    
 
     gPush(); 
+    {
+        // gTranslate(this.position.x, this.position.y, this.position.z);
+        // gRotate(this.rotation.x, 1, 0, 0);
+        // gRotate(this.rotation.y, 0, 1, 0);
+        // gRotate(this.rotation.z, 0, 0, 1);
+        //gTranslate(-20, -1, -10);
+
+        gTranslate(-20, -2, -15 + (TIME+=0.001 * delta));
+        setColor(vec4(1.0,0.5,1.0,1.0));
+        gPush();
         {
-            // gTranslate(this.position.x, this.position.y, this.position.z);
-            // gRotate(this.rotation.x, 1, 0, 0);
-            // gRotate(this.rotation.y, 0, 1, 0);
-            // gRotate(this.rotation.z, 0, 0, 1);
-
-            setColor(vec4(1.0,0.5,1.0,1.0));
-            gPush();
-            {
                 
-                gPush();//Head
-                {
-                    gTranslate(0, 0, -5);
-                    gScale(0.5, 0.5, 0.5);
-                    drawSphere();
-                }
-                gPop();
+            gPush();//Head
+            {
+                gTranslate(0, 1.5, 0);
+                gScale(0.5, 0.5, 0.5);
+                drawSphere();
+            }
+            gPop();
 
-                gPush();//Hat
-                {
-                    gTranslate(0, 0.7, -5);
+            gPush();//Hat
+            {
+                    gTranslate(0, 2.1, 0);
                     gScale(0.3, 0.5, 0.3);
                     gRotate(270, 1, 0, 0);
                     drawCone();
-                }
-                gPop();
             }
             gPop();
-                
+
             gPush();//Body
             {
-                gTranslate(0,-1.5,-5);
-                gScale(0.8, 1, 0.7);
+                    gScale(0.8, 1, 0.7);
+                    drawCube();
+            }
+            gPop();
+
+        }
+        gPop();
+
+        gPush();//Arms
+        {
+                
+            gPush();//Left Arms
+            {
+                gTranslate(-2, -0.5, 0);
+                gRotate(45,0,0,-1);
+                gScale(0.3, 1, 0.3);
                 drawCube();
             }
+            gPop();
 
-            gPush();//Arms
+            gPush();//Right Arms
             {
-                
-                gPush();//Left Arms
-                {
-                    gTranslate(-2, -0.5, -5);
-                    gRotate(45,0,0,-1);
-                    gScale(0.3, 1, 0.3);
-                    drawCube();
-                }
-                gPop();
-
-                gPush();//Right Arms
-                {
-                    gTranslate(2, -0.5, -5);
+                    gTranslate(2, -0.5, 0);
                     gRotate(45,0,0,1);
                     gScale(0.3, 1, 0.3);
                     drawCube();
-                }
-                gPop();
             }
             gPop();
 
-            gPush();//Legs
-            {
- 
-                gPush();//Left Leg
-                {
-                    gRotate((Math.sin(TIME) * 20) + 10 , 1, 0, 0);
-                    gTranslate(-0.5, -1.5, 0);
-                    gScale(0.3, 1, 0.3);
-                    drawCube();
-                }
-                gPop();
-
-                gPush();//Right Leg
-                {
-                    gRotate(-(Math.sin(TIME) * 20) + 10, 1, 0, 0);
-                    gTranslate(0.5, -1.5, 0);
-                    gScale(0.3, 1, 0.3);
-                    drawCube();
-                }
-                gPop();
-            }
-            gPop();
         }
-        gPop();      
+        gPop();
+
+        gPush();//Legs
+        {
+                
+            gPush();//Left Leg
+            {
+                gRotate((Math.sin(TIME) * 20) + 10 , 1, 0, 0);
+                gTranslate(-0.5, -1.5, 0);
+                gScale(0.3, 1, 0.3);
+                drawCube();
+            }
+            gPop();
+
+            gPush();//Right Leg
+            {
+                gRotate(-(Math.sin(TIME) * 20) + 10, 1, 0, 0);
+                gTranslate(0.5, -1.5, 0);
+                gScale(0.3, 1, 0.3);
+                drawCube();
+            }
+            gPop();
+
+        }
+        gPop();
+
+    }
+    gPop();
+
+    gPush(); 
+    {
+
+        gPush(); //Head
+        {
+            gTranslate(0, -1, 0);
+            gScale(0.8, 0.8, 0.8);
+            drawCube();
+
+        }
+        gPop();
+
+        gPush();//Body
+        {
+            gTranslate(0, -2.5, 0);
+            gScale(0.5, 0.5, 0.6);
+            drawCube();
+        }
+        gPop();
+
+        gPush();//Right arm
+        {
+
+            gTranslate(1.5, -2.5, 0);
+            gScale(0.5, 0.3, 0.6);
+            drawCube();
+        }
+        gPop();
+
+        gPush();//Left arm
+        {
+            gTranslate(-1.5, -2.5, 0);
+            gScale(0.5, 0.3, 0.6);
+            drawCube();
+        }
+        gPop();
+
+        gPush();// Right leg
+        {
+            
+            gTranslate(1, -4, 0);
+            gScale(0.5, 0.4, 0.7);
+            drawCube();
+        }
+        gPop();
+
+        gPush();//Left leg
+        {
+
+            gTranslate(-1, -4, 0);
+            gScale(0.5, 0.4, 0.7);
+            drawCube();
+        }
+        gPop();
+
+    }
+    gPop();
+
     
     if( animFlag )
         window.requestAnimFrame(render);
