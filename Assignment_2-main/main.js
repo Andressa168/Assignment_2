@@ -133,6 +133,9 @@ function initTextures() {//add texture;
     
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"road.jpg") ;
+
+    textureArray.push({}) ;
+    loadFileTexture(textureArray[textureArray.length-1],"purple.jpg") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],image2) ;
@@ -660,32 +663,37 @@ var tank = {
             {
                 if (this.isRed === 1) {
                     gl.activeTexture(gl.TEXTURE0);
-                    gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
+                    gl.bindTexture(gl.TEXTURE_2D, textureArray[2].textureWebGL);
                     gl.uniform1i(gl.getUniformLocation(program, "texture1"), 1);
+        
                 } else {
                     gl.activeTexture(gl.TEXTURE0);
-                    gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
+                    gl.bindTexture(gl.TEXTURE_2D, textureArray[2].textureWebGL);
                     gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
                 }
 
-                gScale(1.0, 0.5, 1.5);
+                gScale(2.0, 1, 3.5);
                 drawCube();
             }
             gPop();
 
             // Tank Turret
-            toggleTextures();
+            
             gPush();
-            {
+            {       //add texture for car (top part)
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, textureArray[2].textureWebGL);
+                    gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
+        
                 setColor(vec4(0.5, 0.5, 0.5, 1));
                 gRotate(this.turretRotation.x, 1, 0, 0);
                 gRotate(this.turretRotation.y, 0, 1, 0);
                 gRotate(this.turretRotation.z, 0, 0, 1);
 
-                gTranslate(0, 0.7, 0);
+                gTranslate(0, 1.5, 0);
                 gPush();
                 {
-                    gScale(0.7, 0.6, 0.6);
+                    gScale(2.0, 0.55, 2);
                     drawCube();
                 }
                 gPop();
@@ -731,46 +739,46 @@ var tank = {
                 gPop();
             }
             gPop();
-            toggleTextures();
+            
 
             // Tank Wheels
             toggleTextures();
             gPush();
             {
-                gTranslate(1.1, -0.6, 0.7);
+                gTranslate(2.4, -1, 2);
                 gRotate(TIME * this.rotateSpeed, 1, 0, 0);
                 gRotate(90, 0, 1, 0);
-                gScale(0.5, 0.5, 0.1);
+                gScale(1, 1, 0.3);
                 setColor(vec4(0.5, 0.5, 0.5, 1.0));
                 drawCone()
             }
             gPop();
             gPush();
             {
-                gTranslate(1.1, -0.6, -0.7);
+                gTranslate(2.4, -1, -2);
                 gRotate(TIME * this.rotateSpeed, 1, 0, 0);
                 gRotate(90, 0, 1, 0);
-                gScale(0.5, 0.5, 0.1);
+                gScale(1, 1, 0.3);
                 setColor(vec4(0.5, 0.5, 0.5, 1.0));
                 drawCone()
             }
             gPop();
             gPush();
             {
-                gTranslate(-1.1, -0.6, 0.7);
+                gTranslate(-2.4, -1, 2);
                 gRotate(TIME * this.rotateSpeed, 1, 0, 0);
                 gRotate(90, 0, -1, 0);
-                gScale(0.5, 0.5, 0.1);
+                gScale(1, 1, 0.3);
                 setColor(vec4(0.5, 0.5, 0.5, 1.0));
                 drawCone()
             }
             gPop();
             gPush();
             {
-                gTranslate(-1.1, -0.6, -0.7);
+                gTranslate(-2.4, -1, -2);
                 gRotate(TIME * this.rotateSpeed, 1, 0, 0);
                 gRotate(90, 0, -1, 0);
-                gScale(0.5, 0.5, 0.1);
+                gScale(1, 1, 0.3);
                 setColor(vec4(0.5, 0.5, 0.5, 1.0));
                 drawCone()
             }
@@ -817,10 +825,10 @@ function scene0(sceneTime) {
     if (sceneTime === 0) {
         // initial location placing
         tank.position.x = -8;
-        tank.position.y = 0;
+        tank.position.y = -2;
         tank.position.z = -45;
         at = vec3(tank.position.x, tank.position.y, tank.position.z);
-        eye = vec3(tank.position.x - 3, 1, tank.position.z + 1);
+        eye = vec3(tank.position.x - 6, 2, tank.position.z + 0.5); //camera position
         eye[2] = -50;
     } else if (sceneTime <= 4) {
         tank.position.z += 0.01 * delta;
@@ -834,8 +842,8 @@ function scene0(sceneTime) {
         eye[2] += 0.05 * delta;
     }
 
-    tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
-    tank.turretGunRotation.x = -5 + 5 * Math.cos(currentTime * 4);
+    //tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
+    //tank.turretGunRotation.x = -5 + 5 * Math.cos(currentTime * 4);
 
     tank.renderTank();
     people.renderPeople();
