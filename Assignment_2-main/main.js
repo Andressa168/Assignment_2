@@ -18,15 +18,16 @@ var delta = 165 / 60;// delta added
 
 var lightPosition2 = vec4(100.0, 100.0, 100.0, 1.0 );
 var lightPosition = vec4(0.0, 0.0, 100.0, 1.0 );
+var lightPosition3 = vec4(0.0, 0.0, 0.0, 1.0 );
 
-var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
-var lightDiffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
+var lightAmbient = vec4(1, 1, 1, 1.0 );
+var lightDiffuse = vec4( 2.0, 2.0, 2.0, 1.0 );
 var lightSpecular = vec4( 1.0, 1.0, 1.0, 1.0 );
 
 var materialAmbient = vec4( 1.0, 0.0, 1.0, 1.0 );
 var materialDiffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
-var materialSpecular = vec4( 0.4, 0.4, 0.4, 1.0 );
-var materialShininess = 30.0;
+var materialSpecular = vec4( 0.4, 0.4, 1, 1.0 );
+var materialShininess = 1.0;
 
 
 var ambientColor, diffuseColor, specularColor;
@@ -136,6 +137,9 @@ function initTextures() {//add texture;
 
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"purple.jpg") ;
+
+    textureArray.push({}) ;
+    loadFileTexture(textureArray[textureArray.length-1],"card3.jpg") ;
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],image2) ;
@@ -384,7 +388,7 @@ function gPush() {
 
 var currentTime = 0;
 var sceneNum = 0;
-var sceneLengths = [6, 11, 10.8, 6.1, -1];
+var sceneLengths = [8, 11, 10.8, 6.1, -1]; //set scene length, -1 will stop the scene
 var timeDiff = 0;
 var sceneTime = 0;
 var frameRateTime = 0;
@@ -620,24 +624,6 @@ function render() {//start
         }
     }
     
-/*var people = {
-
-    position: new Vector(),
-    rotation: new Vector(),
-
-    renderPeople: function() {
-
-        gPush(); 
-        {
-            gTranslate(this.position.x, this.position.y, this.position.z);
-            gRotate(this.rotation.x, 1, 0, 0);
-            gRotate(this.rotation.y, 0, 1, 0);
-            gRotate(this.rotation.z, 0, 0, 1);
-
-            
-        }
-    }
-}*/
 
 // draw cars
 var tank = {
@@ -677,8 +663,31 @@ var tank = {
             }
             gPop();
 
-            // Tank Turret
-            
+            // car lights
+            toggleTextures();
+            gPush();
+            {
+                gTranslate(1.4,-0.1,3.2);
+                    lightPosition3 = vec4(1.4, -0.1, 3.2, 1.0);
+                    gScale(0.5, 0.3, 0.5);
+                    setColor(vec4(1, 0.7, 0, 0));
+                    drawCube();
+
+            }
+            gPop();
+            gPush();
+            {
+                gTranslate(-1.4,-0.1,3.2);
+                    lightPosition = vec4(-1.4, -0.1, 3.2, 1.0);
+                    gScale(0.5, 0.3, 0.5);
+                    setColor(vec4(1, 0.7, 0, 0));
+                    drawCube();
+
+            }
+            gPop();
+            toggleTextures();
+
+            // Car (top part)
             gPush();
             {       //add texture for car (top part)
                     gl.activeTexture(gl.TEXTURE0);
@@ -793,6 +802,193 @@ var tank = {
 
 }
 
+//another car
+var car2 = {
+    position: new Vector(),
+    rotation: new Vector(),
+    turretRotation: new Vector(),
+    shotScale: 0,
+    rotateSpeed: 300,
+    isRed: 0,
+    turretGunRotation: new Vector(),
+
+    renderCar2: function () {
+
+        gPush();
+        {
+            gTranslate(this.position.x, this.position.y, this.position.z);
+            gRotate(this.rotation.x, 1, 0, 0);
+            gRotate(this.rotation.y, 0, 1, 0);
+            gRotate(this.rotation.z, 0, 0, 1);
+
+            //Car2 Body
+            gPush();
+            {
+                if (this.isRed === 1) {
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, textureArray[3].textureWebGL);
+                    gl.uniform1i(gl.getUniformLocation(program, "texture1"), 1);
+        
+                } else {
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, textureArray[3].textureWebGL);
+                    gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
+                }
+
+                gScale(2.0, 1, 3.5);
+                drawCube();
+            }
+            gPop();
+
+            // car lights
+            toggleTextures();
+            gPush();
+            {
+                gTranslate(1.4,-0.1,3.2);
+                    lightPosition3 = vec4(1.4, -0.1, 3.2, 1.0);
+                    gScale(0.5, 0.5, 0.5);
+                    setColor(vec4(1, 0.1, 0.1, 0));
+                    drawCube();
+
+            }
+            gPop();
+            gPush();
+            {
+                gTranslate(-1.4,-0.1,3.2);
+                    lightPosition = vec4(-1.4, -0.1, 3.2, 1.0);
+                    gScale(0.5, 0.5, 0.5);
+                    setColor(vec4(1, 0.1, 0.1, 0));
+                    drawCube();
+
+            }
+            gPop();
+            gPush();
+            {
+                gTranslate(-0.1,2.4,0.7);
+                    lightPosition = vec4(-1.4, -0.1, 3.2, 1.0);
+                    gScale(1.5, 0.3, 0.5);
+                    setColor(vec4(1, 0.1, 0.1, 0));
+                    drawCube();
+
+            }
+            gPop();
+            toggleTextures();
+
+            // Car (top part)
+            gPush();
+            {       //add texture for car (top part)
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, textureArray[3].textureWebGL);
+                    gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
+        
+                setColor(vec4(0.5, 0.5, 0.5, 1));
+                gRotate(this.turretRotation.x, 1, 0, 0);
+                gRotate(this.turretRotation.y, 0, 1, 0);
+                gRotate(this.turretRotation.z, 0, 0, 1);
+
+                gTranslate(0, 2, -1);
+                gPush();
+                {
+                    gScale(2.0, 1, 2);
+                    drawCube();
+                }
+                gPop();
+
+                // Turret Cylinder
+                gPush();
+                {
+                    gRotate(this.turretGunRotation.x, 1, 0, 0);
+                    gRotate(this.turretGunRotation.y, 0, 1, 0);
+                    gRotate(this.turretGunRotation.z, 0, 0, 1);
+
+                    gPush();
+                    {
+                        gTranslate(0, 0.2, 1);
+                        gPush();
+                        {
+                            gScale(0.5, 0.5, 3);
+                            drawCylinder();
+                        }
+                        gPop();
+
+                        if (this.isShooting === 1) {
+                            gPush();
+                            {
+                                gTranslate(0.1, 0.1, 2);
+
+                                gScale(this.shotScale, this.shotScale, this.shotScale);
+                                setColor(vec4(1, 0, 0, 0));
+                                drawSphere();
+                            }
+                            gPop();
+
+                            if (this.shotScale > 1) {
+                                this.shotScale = 0;
+                                this.isShooting = 0;
+                            } else {
+                                this.shotScale += 0.05 * delta;
+                            }
+                        }
+                    }
+                    gPop();
+                }
+                gPop();
+            }
+            gPop();
+            
+
+            // Tank Wheels
+            toggleTextures();
+            gPush();
+            {
+                gTranslate(2.4, -1, 2);
+                gRotate(TIME * this.rotateSpeed, 1, 0, 0);
+                gRotate(90, 0, 1, 0);
+                gScale(1, 1, 0.3);
+                setColor(vec4(0, 0, 0, 1.0)); //black
+                drawCone()
+            }
+            gPop();
+            gPush();
+            {
+                gTranslate(2.4, -1, -2);
+                gRotate(TIME * this.rotateSpeed, 1, 0, 0);
+                gRotate(90, 0, 1, 0);
+                gScale(1, 1, 0.3);
+                setColor(vec4(0, 0, 0, 1.0));
+                drawCone()
+            }
+            gPop();
+            gPush();
+            {
+                gTranslate(-2.4, -1, 2);
+                gRotate(TIME * this.rotateSpeed, 1, 0, 0);
+                gRotate(90, 0, -1, 0);
+                gScale(1, 1, 0.3);
+                setColor(vec4(0, 0, 0, 1.0));
+                drawCone()
+            }
+            gPop();
+            gPush();
+            {
+                gTranslate(-2.4, -1, -2);
+                gRotate(TIME * this.rotateSpeed, 1, 0, 0);
+                gRotate(90, 0, -1, 0);
+                gScale(1, 1, 0.3);
+                setColor(vec4(0, 0, 0, 1.0));
+                drawCone()
+            }
+            gPop();
+            toggleTextures();
+        }
+        gPop();
+    },
+    shoot: function () {
+        this.isShooting = 1;
+    }
+
+}
+
 
 
 function drawBackground() {
@@ -822,31 +1018,52 @@ function drawBackground() {
 }
 
 function scene0(sceneTime) {
+    // first scene last for 6 seconds
     if (sceneTime === 0) {
-        // initial location placing
-        tank.position.x = -8;
-        tank.position.y = -2;
+        // initial location placing of car
+        tank.position.x = -5;
+        tank.position.y = -2.4;
         tank.position.z = -45;
-        at = vec3(tank.position.x, tank.position.y, tank.position.z);
-        eye = vec3(tank.position.x - 6, 2, tank.position.z + 0.5); //camera position
-        eye[2] = -50;
-    } else if (sceneTime <= 4) {
-        tank.position.z += 0.01 * delta;
-        at[2] += 0.01 * delta;
+        // initial loaction of car 2
+        car2.position.x = 45;
+        car2.position.y = -2.4;
+        car2.position.z = 0;
+        car2.rotation.y = -90
+
+        lightPosition3 = vec4(tank.position.x, tank.position.y, tank.position.z, 1.0);
+        at = vec3(tank.position.x, tank.position.y, tank.position.z); //always at the car
+        eye = vec3(tank.position.x - 6, 1, tank.position.z + 0.5); //camera position - -6, + 0.5
+        eye[2] = -40; //z value of camera
+    } else if (sceneTime <= 3) {
+        tank.position.z += 0.02 * delta; //car speed
+        car2.position.x -= 0.05 * delta;
+
+         at[2] += 0.05 * delta;
         eye[1] += 0.0045 * delta;
         eye[2] += 0.03 * delta;
-    } else if (sceneTime <= 6) {
-        tank.position.z += 0.01 * delta;
-        at[2] += 0.01 * delta;
-        eye[1] += 0.03 * delta;
-        eye[2] += 0.05 * delta;
+    } else if (sceneTime <= 8) {
+        tank.position.z += 0.02 * delta; //speed up
+        car2.position.x -= 0.07 * delta;
+        at[2] += 0.01 * delta; //z
+        eye[1] += 0.01 * delta; //y
+        eye[2] += 0.01 * delta; //z
     }
 
     //tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
     //tank.turretGunRotation.x = -5 + 5 * Math.cos(currentTime * 4);
-
     tank.renderTank();
     people.renderPeople();
+    car2.renderCar2();
+    
+   
+}
+
+function scene1(sceneTime){
+    //for car number 2
+    if (sceneTime ==0){
+
+    }
+
 }
 
 // A simple camera controller which uses an HTML element as the event
