@@ -76,14 +76,6 @@ for ( var i = 0; i < texSize; i++ )
 
 var textureArray = [] ;
 
-class Vector {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-    }
-}
-
 function isLoaded(im) {
     if (im.complete) {
         console.log("loaded") ;
@@ -472,8 +464,8 @@ function render() {//start
         frameCount = 0;
     }
 
-    if(animFlag)
-    window.requestAnimFrame(render);
+    if( animFlag )
+        window.requestAnimFrame(render);
 
 }
 
@@ -530,99 +522,104 @@ function render() {//start
     // }
     // gPop() ;
 
-    //Owner of the house;
-    var people = {
-        position: new Vector(),
-        rotation: new Vector(),
+class Vector {
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+}
 
-        renderPeople:function (){
-            gPush();
-    {
-        gTranslate(0, -1.7, 0);
-        gPush();//Head
+var people = {
+
+    position: new Vector(),
+    rotation: new Vector(),
+
+    renderPeople: function() {
+
+        gPush();
         {
-            gTranslate(0,0,-5) ;
-            gScale(0.5, 0.5, 0.5);
+        
+            // gTranslate(this.position.x, this.position.y, this.position.z);
+            // gRotate(this.rotation.x, 1, 0, 0);
+            // gRotate(this.rotation.y, 0, 1, 0);
+            // gRotate(this.rotation.z, 0, 0, 1);
+            gTranslate(-20, -1, TIME+=0.01);
             setColor(vec4(1.0,0.5,1.0,1.0)) ;
-            gRotate(TIME*180/3.14159,0,1,0) ;
-            drawSphere();
-        }
-        gPop();
-
-        gPush();//Body
-        {
-            gTranslate(0,-1.5,-5) ;
-            gScale(0.8, 1, 0.7);
-            setColor(vec4(1.0,0.5,1.0,1.0)) ;
-            gRotate(TIME*180/3.14159,0,1,0) ;
-            drawCube();
-        }
-        gPop();
-
-        gPush();//Hat
-        {
-            gTranslate(0, 0.7, -5);
-            gScale(0.3, 0.5, 0.3);
-            setColor(vec4(1.0,0.5,1.0,1.0));
-            gRotate(270, 1, 0, 0);
-            drawCone();
-        }
-        gPop();
-
-        gPush();//Arms
-        {
-
-            gPush();//Left Arms
+            gPush();//Head
             {
-                gTranslate(-1, -1.5, -5);
-                gRotate(45,0,0,-1);
-                gScale(0.2, 0.7, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
+                gTranslate(0, 0, -20);
+                gScale(0.5, 0.5, 0.5);
                 drawCube();
             }
             gPop();
 
-            
-            gPush();//Right Arms
+            gPush();//Body
             {
-                gTranslate(1, -1.5, -5);
-                gRotate(45,0,0,1);
-                gScale(0.2, 0.7, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
-                drawCube();
-            }
-            gPop();
-        }
-        gPop();
-
-        gPush();//Legs
-        {
-
-            gPush();//Left Leg
-            {
-                gTranslate(-0.35, -3, -5);
-                gScale(0.2, 0.8, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
-                gRotate(TIME*180/3.14159,0,1,0);
+                gTranslate(0,-1.5, -20) ;
+                gScale(0.8, 1, 0.8);
                 drawCube();
             }
             gPop();
 
-            gPush();//Right Leg
+            gPush();//Hat
             {
-                gTranslate(0.35, -3, -5);
-                gScale(0.2, 0.8, 0.2);
-                setColor(vec4(1.0,0.5,1.0,1.0));
-                gRotate(TIME*180/3.14159,0,1,0);
-                drawCube();
+                gTranslate(0, 0.7, -20);
+                gScale(0.3, 0.5, 0.3);
+                gRotate(270, 1, 0, 0);
+                drawCone();
+            }
+            gPop();
+
+            gPush();//Arms
+            {
+
+                gPush();//Left Arms
+                {
+                    gTranslate(-1, -1.5, -20);
+                    gRotate(45, 0, 0, -1);
+                    gScale(0.2, 0.7, 0.2);
+                    drawCube();
+                }
+                gPop();
+
+                gPush();//Right Arms
+                {
+                    gTranslate(1, -1.5, -20);
+                    gRotate(45, 0, 0, 1);
+                    gScale(0.2, 0.7, 0.2);
+                    drawCube();
+                }
+                gPop();
+            }
+            gPop();
+
+            gPush();//Legs
+            {
+                
+                gPush();//Left Leg
+                {
+                    gRotate((Math.sin(TIME) * 5) + 2, 1, 0, 0);
+                    gTranslate(-0.5, -3, -20);
+                    gScale(0.2, 0.8, 0.2);
+                    drawCube();
+                }
+                gPop();
+
+                gPush();//Right Leg
+                {
+                    gRotate(-(Math.sin(TIME) * 5) + 2, 1, 0, 0);
+                    gTranslate(0.5, -3, -20);
+                    gScale(0.2, 0.8, 0.2);
+                    drawCube();
+                }
+                gPop();
             }
             gPop();
         }
         gPop();
     }
-    gPop();
-        }
-    }
+}
     
 
 // draw cars
@@ -1024,29 +1021,6 @@ function scene0(sceneTime) {
         tank.position.x = -5;
         tank.position.y = -2.4;
         tank.position.z = -45;
-        // initial loaction of car 2
-        car2.position.x = 45;
-        car2.position.y = -2.4;
-        car2.position.z = 0;
-        car2.rotation.y = -90
-
-        lightPosition3 = vec4(tank.position.x, tank.position.y, tank.position.z, 1.0);
-        at = vec3(tank.position.x, tank.position.y, tank.position.z); //always at the car
-        eye = vec3(tank.position.x - 6, 1, tank.position.z + 0.5); //camera position - -6, + 0.5
-        eye[2] = -40; //z value of camera
-    } else if (sceneTime <= 3) {
-        tank.position.z += 0.02 * delta; //car speed
-        car2.position.x -= 0.05 * delta;
-
-         at[2] += 0.05 * delta;
-        eye[1] += 0.0045 * delta;
-        eye[2] += 0.03 * delta;
-    } else if (sceneTime <= 8) {
-        tank.position.z += 0.02 * delta; //speed up
-        car2.position.x -= 0.07 * delta;
-        at[2] += 0.01 * delta; //z
-        eye[1] += 0.01 * delta; //y
-        eye[2] += 0.01 * delta; //z
     }
 
     //tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
