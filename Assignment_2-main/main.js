@@ -122,7 +122,7 @@ function loadImageTexture(tex, image) {
 function initTextures() {//add texture;
     
     textureArray.push({}) ;
-    loadFileTexture(textureArray[textureArray.length-1],"timberhouses00.jpg") ;
+    loadFileTexture(textureArray[textureArray.length-1],"timberhouses00.jpg");
     
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"road.jpg") ;
@@ -132,6 +132,10 @@ function initTextures() {//add texture;
 
     textureArray.push({}) ;
     loadFileTexture(textureArray[textureArray.length-1],"card3.jpg") ;
+
+    textureArray.push({}) ;
+    loadFileTexture(textureArray[textureArray.length-1],"school.png") ;
+    //https://creazilla.com/nodes/63211-school-clipart
     
     textureArray.push({}) ;
     loadImageTexture(textureArray[textureArray.length-1],image2) ;
@@ -392,8 +396,8 @@ function render() {//start
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     at = vec3(at[0], at[1], at[2]);
-    eye = vec3(eye[0], eye[1], eye[2]);
-    //eye = vec3(10,0,1);
+    // eye = vec3(eye[0], eye[1], eye[2]);
+    eye = vec3(-20, -1, 1);
     eye[1] = eye[1] + 0 ;
    
     // set the projection matrix
@@ -540,45 +544,52 @@ var people = {
         gPush();
         {
         
-            // gTranslate(this.position.x, this.position.y, this.position.z);
-            // gRotate(this.rotation.x, 1, 0, 0);
-            // gRotate(this.rotation.y, 0, 1, 0);
-            // gRotate(this.rotation.z, 0, 0, 1);
-            gTranslate(-20, -1, TIME+=0.01);
+            gTranslate(this.position.x, this.position.y, this.position.z);
+            gRotate(this.rotation.x, 1, 0, 0);
+            gRotate(this.rotation.y, 0, 1, 0);
+            gRotate(this.rotation.z, 0, 0, 1);
+
             setColor(vec4(1.0,0.5,1.0,1.0)) ;
-            gPush();//Head
-            {
-                gTranslate(0, 0, -20);
-                gScale(0.5, 0.5, 0.5);
-                drawCube();
-            }
-            gPop();
 
-            gPush();//Body
+            gPush();
             {
-                gTranslate(0,-1.5, -20) ;
-                gScale(0.8, 1, 0.8);
-                drawCube();
-            }
-            gPop();
+                    
+                gPush();//Head
+                {
+                    gTranslate(0, 0, -20);
+                    gScale(0.6, 0.6, 0.6);
+                    drawSphere();
+                }
+                gPop();
 
-            gPush();//Hat
-            {
-                gTranslate(0, 0.7, -20);
-                gScale(0.3, 0.5, 0.3);
-                gRotate(270, 1, 0, 0);
-                drawCone();
+                gPush();//Hat
+                {
+                    gTranslate(0, 0.7, -20);
+                    gScale(0.3, 0.5, 0.3);
+                    gRotate(270, 1, 0, 0);
+                    drawCone();
+                }
+                gPop();
+
+                gPush();//Body
+                {
+                    gTranslate(0,-1.5, -20) ;
+                    gScale(0.8, 1, 0.8);
+                    drawCube();
+                }
+                gPop();
+
             }
             gPop();
 
             gPush();//Arms
             {
-
+                    
                 gPush();//Left Arms
                 {
                     gTranslate(-1, -1.5, -20);
-                    gRotate(45, 0, 0, -1);
-                    gScale(0.2, 0.7, 0.2);
+                    gRotate(45,0,0,-1);
+                    gScale(0.2, 0.8, 0.2);
                     drawCube();
                 }
                 gPop();
@@ -586,36 +597,39 @@ var people = {
                 gPush();//Right Arms
                 {
                     gTranslate(1, -1.5, -20);
-                    gRotate(45, 0, 0, 1);
-                    gScale(0.2, 0.7, 0.2);
+                    gRotate(45,0,0,1);
+                    gScale(0.2, 0.8, 0.2);
                     drawCube();
                 }
                 gPop();
+
             }
             gPop();
 
             gPush();//Legs
             {
-                
+                    
                 gPush();//Left Leg
                 {
-                    gRotate((Math.sin(TIME) * 5) + 2, 1, 0, 0);
+                    gRotate((Math.sin(TIME) * 10), 1, 0, 0);
                     gTranslate(-0.5, -3, -20);
-                    gScale(0.2, 0.8, 0.2);
+                    gScale(0.2, 1, 0.2);
                     drawCube();
                 }
                 gPop();
 
                 gPush();//Right Leg
                 {
-                    gRotate(-(Math.sin(TIME) * 5) + 2, 1, 0, 0);
+                    gRotate(-(Math.sin(TIME) * 10), 1, 0, 0);
                     gTranslate(0.5, -3, -20);
-                    gScale(0.2, 0.8, 0.2);
+                    gScale(0.2, 1, 0.2);
                     drawCube();
                 }
                 gPop();
+
             }
             gPop();
+
         }
         gPop();
     }
@@ -986,15 +1000,13 @@ var car2 = {
 
 }
 
-
-
 function drawBackground() {
 
     gPush();//Plataform;
     {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
-        gl.uniform1i(gl.getUniformLocation(program, "texture2"), 2);
+        gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
         gTranslate(0, -6, 0) ;
         gScale(60, 1, 60);
         drawCube();
@@ -1006,7 +1018,18 @@ function drawBackground() {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
         gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-        gTranslate(-35, 0, -35) ;
+        gTranslate(-35, 3, -35) ;
+        gScale(15, 8, 12);
+        drawCube() ;
+    }
+    gPop();
+
+    gPush();//School;
+    {
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, textureArray[4].textureWebGL);
+        gl.uniform1i(gl.getUniformLocation(program, "texture4"), 4);
+        gTranslate(35, 3, 35) ;
         gScale(15, 8, 12);
         drawCube() ;
     }
@@ -1021,6 +1044,14 @@ function scene0(sceneTime) {
         tank.position.x = -5;
         tank.position.y = -2.4;
         tank.position.z = -45;
+
+        people.position.x = -20;
+        people.position.y = -1;
+        people.position.z = 1;
+
+        car2.position.x = 5;
+        car2.position.y = -2.4;
+        car2.position.z = -45;
     }
 
     //tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
