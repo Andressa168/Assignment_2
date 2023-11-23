@@ -582,19 +582,6 @@ var people = {
                     drawCube();
                 }
                 gPop();
-
-                gPush();
-                {
-
-                    gl.activeTexture(gl.TEXTURE0);
-                    gl.bindTexture(gl.TEXTURE_2D, textureArray[5].textureWebGL);
-                    gl.uniform1i(gl.getUniformLocation(program, "texture5"), 5);
-                    gTranslate(0 , -1, -21);
-                    gScale(0.6, 0.7, 0.6);
-                    drawCube();
-                }
-                gPop();
-
             }
             gPop();
 
@@ -647,6 +634,19 @@ var people = {
             }
             gPop();
 
+            gPush();
+            {
+
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, textureArray[5].textureWebGL);
+                gl.uniform1i(gl.getUniformLocation(program, "texture5"), 5);
+
+                gTranslate(0 , -1, -21);
+                gScale(0.6, 0.7, 0.6);
+                drawCube();
+            }
+            gPop();
+
         }
         gPop();
     }
@@ -656,7 +656,7 @@ var electricScooter = {
 
     position: new Vector(),
     rotation: new Vector(),
-    rotateSpeed: 80,
+    rotateSpeed: 90,
 
     renderElectricScooter: function() {
 
