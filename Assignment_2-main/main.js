@@ -400,13 +400,12 @@ function render() {//start
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     at = vec3(at[0], at[1], at[2]);
-    // eye = vec3(eye[0], eye[1], eye[2]);
-    eye = vec3(10, 0, 0);
-    eye[1] = eye[1] + 0 ;
+    eye = vec3(eye[0], eye[1], eye[2]);
+    eye[1] = eye[1] + 0;
    
     // set the projection matrix
     // projectionMatrix = ortho(left, right, bottom, ytop, near, far);
-    projectionMatrix = perspective(45, 1, near, far);
+    projectionMatrix = perspective(90, 1, near, far);
     
     // set the camera matrix
     viewMatrix = lookAt(eye, at, up);
@@ -590,7 +589,7 @@ var people = {
                     
                 gPush();//Left Arms
                 {
-                    gTranslate(-1, -1, -19.5);
+                    gTranslate(-0.8, -1, -19.5);
                     gRotate(95,1,0,0);
                     gScale(0.2, 0.9, 0.2);
                     drawCube();
@@ -599,7 +598,7 @@ var people = {
 
                 gPush();//Right Arms
                 {
-                    gTranslate(1, -1, -19.5);
+                    gTranslate(0.8, -1, -19.5);
                     gRotate(95,1,0,0);
                     gScale(0.2, 0.9, 0.2);
                     drawCube();
@@ -662,7 +661,7 @@ var electricScooter = {
 
         gPush();
         {
-            gTranslate(this.position.x, this.position.y, this.position.z);
+            gTranslate(this.position.x, this.position.y, this.position.z - 1.2);
             gRotate(this.rotation.x, 1, 0, 0);
             gRotate(this.rotation.y, 0, 1, 0);
             gRotate(this.rotation.z, 0, 0, 1);
@@ -1118,7 +1117,7 @@ function drawBackground() {
         gl.bindTexture(gl.TEXTURE_2D, textureArray[1].textureWebGL);
         gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
         gTranslate(0, -6, 0) ;
-        gScale(60, 1, 60);
+        gScale(80, 1, 80);
         drawCube();
     }
     gPop();
@@ -1128,8 +1127,8 @@ function drawBackground() {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
         gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-        gTranslate(-35, 3, -35) ;
-        gScale(15, 8, 12);
+        gTranslate(-42, 3, -42) ;
+        gScale(17, 8, 17);
         drawCube() ;
     }
     gPop();
@@ -1139,8 +1138,8 @@ function drawBackground() {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[4].textureWebGL);
         gl.uniform1i(gl.getUniformLocation(program, "texture4"), 4);
-        gTranslate(35, 3, 35) ;
-        gScale(15, 8, 12);
+        gTranslate(42, 3, 42) ;
+        gScale(17, 8, 17);
         drawCube() ;
     }
     gPop();
@@ -1155,15 +1154,34 @@ function scene0(sceneTime) {
         tank.position.y = -2.4;
         tank.position.z = -45;
 
-        people.position.x = -20.35;
+        people.position.x = -21;
         people.position.y = -0.5;
-        people.position.z = 1;
+        people.position.z = -2;
+
+        electricScooter.position.x = -0.5;
+        electricScooter.position.y = 0;
+        electricScooter.position.z = -3.5;
 
         car2.position.x = 5;
         car2.position.y = -2.4;
         car2.position.z = -45;
 
+        at = vec3(people.position.x, people.position.y, people.position.z - 8);
+        eye = vec3(people.position.x, 10, people.position.z + 10);
+        eye[0] = -10; //-20人物的正面；
+
+    } 
+    else if (sceneTime <= 8) {
+
+        at = vec3(people.position.x, people.position.y, people.position.z - 8);
+        eye = vec3(people.position.x + 6 * Math.sin(sceneTime) , people.position.y + 15, people.position.z + 6 * Math.cos(sceneTime));
+        //eye = vec3(people.position.x + 6 * Math.sin(sceneTime) , people.position.y + 4.5 * currentTime, people.position.z + 6 * Math.cos(sceneTime));
+        eye[0] = -5 * currentTime;
     }
+    
+    electricScooter.position.z =+ 2.5 * currentTime; 
+    people.position.z =+ 2.5 * currentTime;
+
 
     //tank.turretRotation.y = 20 * Math.cos(currentTime * 1.5);
     //tank.turretGunRotation.x = -5 + 5 * Math.cos(currentTime * 4);
