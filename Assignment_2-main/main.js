@@ -1158,13 +1158,9 @@ function scene0(sceneTime) {
         people.position.y = -0.5;
         people.position.z = -2;
 
-        people.rotation.y = -90;
-
         electricScooter.position.x = -0.5;
         electricScooter.position.y = 0;
         electricScooter.position.z = -3.5;
-
-        electricScooter.rotation.y = -90;
 
         car2.position.x = 5;
         car2.position.y = -2.4;
