@@ -1127,7 +1127,7 @@ function drawBackground() {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textureArray[0].textureWebGL);
         gl.uniform1i(gl.getUniformLocation(program, "texture1"), 0);
-        gTranslate(-42, 3, -42) ;
+        gTranslate(-42, 3, -43) ;
         gScale(17, 8, 17);
         drawCube() ;
     }
@@ -1158,9 +1158,13 @@ function scene0(sceneTime) {
         people.position.y = -0.5;
         people.position.z = -2;
 
+        people.rotation.y = -90;
+
         electricScooter.position.x = -0.5;
         electricScooter.position.y = 0;
         electricScooter.position.z = -3.5;
+
+        electricScooter.rotation.y = -90;
 
         car2.position.x = 5;
         car2.position.y = -2.4;
@@ -1171,12 +1175,20 @@ function scene0(sceneTime) {
         eye[0] = -10; //-20人物的正面；
 
     } 
+    else if (sceneTime <= 4) {
+
+        at = vec3(people.position.x, people.position.y, people.position.z - 8);
+        eye = vec3(people.position.x + 6 * Math.sin(sceneTime) , people.position.y + 15, people.position.z + 6 * Math.cos(sceneTime));
+        //eye = vec3(people.position.x + 6 * Math.sin(sceneTime) , people.position.y + 4.5 * currentTime, people.position.z + 6 * Math.cos(sceneTime));
+        // eye[0] = -5 * currentTime;
+    }
     else if (sceneTime <= 8) {
 
         at = vec3(people.position.x, people.position.y, people.position.z - 8);
         eye = vec3(people.position.x + 6 * Math.sin(sceneTime) , people.position.y + 15, people.position.z + 6 * Math.cos(sceneTime));
         //eye = vec3(people.position.x + 6 * Math.sin(sceneTime) , people.position.y + 4.5 * currentTime, people.position.z + 6 * Math.cos(sceneTime));
         eye[0] = -5 * currentTime;
+
     }
     
     electricScooter.position.z =+ 2.5 * currentTime; 
